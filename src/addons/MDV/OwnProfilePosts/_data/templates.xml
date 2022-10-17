@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="mdv_opp_index" version_id="1000070" version_string="1.0.0"><![CDATA[<xf:title>{{ phrase('mdv_opp_posts_by_user', {'name': $user.username}) }} </xf:title>
+
+<xf:js src="xf/inline_mod.js" min="1" />
+
+<xf:if is="$posts is not empty">
+	<div class="block-outer block-outer--after">
+		<xf:pagenav link="members/self-profile-posts"
+					data="{$user}"
+					page="{$selfPage}"
+					perpage="{$selfPerPage}"
+					total="{$selfTotal}"
+					wrapperclass="block-outer-main" />
+	</div>
+
+	<div class="block"
+		 data-xf-init="lightbox inline-mod"
+		 data-type="profile_post"
+		 data-href="{{ link('inline-mod') }}">
+
+		<div class="block-container">
+			<xf:foreach loop="$posts" value="$post">
+				<xf:macro template="profile_post_macros"
+						  name="{{ $post.message_state == 'deleted' ? 'profile_post_deleted' : 'profile_post' }}"
+						  arg-attachmentData="{$profilePostAttachData.{$post.profile_post_id}}"
+						  arg-profilePost="{$post}" />
+			</xf:foreach>
+		</div>
+	</div>
+	<xf:else/>
+	<div class="blockMessage">
+		{{ phrase('no_items_to_display') }}
+	</div>
+</xf:if>]]></template>
+</templates>

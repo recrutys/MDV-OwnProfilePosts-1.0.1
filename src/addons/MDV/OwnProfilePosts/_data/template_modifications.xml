@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="member_view" modification_key="mdv_opp_add_tab" description="Add tabs #1" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:if is="$user.canViewPostsOnProfile()">
+		<li class="is-active" role="tabpanel" id="profile-posts">
+			<xf:js src="xf/inline_mod.js" min="1" />
+
+			<xf:macro template="lightbox_macros" name="setup" arg-canViewAttachments="{$canViewAttachments}" />
+
+			<div class="block block--messages"
+				data-xf-init="lightbox inline-mod"
+				data-type="profile_post"
+				data-href="{{ link('inline-mod') }}">
+
+				<div class="block-container">
+					<div class="block-body js-replyNewMessageContainer">
+						<xf:if is="$user.canPostOnProfile()">
+							<xf:set var="$firstProfilePost" value="{$profilePosts|first}" />
+							<xf:macro template="profile_post_macros" name="quick_post"
+								arg-user="{$user}"
+								arg-lastDate="{{ $firstProfilePost.post_date ?: 0 }}"
+								arg-containerSelector="< .js-replyNewMessageContainer"
+								arg-attachmentData="{$attachmentData}" />
+						</xf:if>
+
+						<xf:if is="$profilePosts is not empty">
+							<xf:foreach loop="$profilePosts" value="$profilePost">
+								<xf:macro template="profile_post_macros"
+									name="{{ $profilePost.message_state == 'deleted' ? 'profile_post_deleted' : 'profile_post' }}"
+									arg-attachmentData="{$profilePostAttachData.{$profilePost.profile_post_id}}"
+									arg-profilePost="{$profilePost}" />
+							</xf:foreach>
+						<xf:else />
+							<div class="block-row js-replyNoMessages">{{ phrase('there_no_messages_on_xs_profile_yet', {'name': $user.username}) }}</div>
+						</xf:if>
+					</div>
+				</div>
+
+				<div class="block-outer block-outer--after">
+					<xf:pagenav
+						page="{$page}" perpage="{$perPage}" total="{$total}"
+						link="members" data="{$user}"
+						wrapperclass="block-outer-main" />
+					<div class="block-outer-opposite">
+						<xf:showignored />
+						<xf:if is="$canInlineMod">
+							<xf:macro template="inline_mod_macros" name="button" />
+						</xf:if>
+					</div>
+				</div>
+			</div>
+		</li>
+	</xf:if>]]></find>
+    <replace><![CDATA[$0
+
+    <li data-href="{{ link('members/self-profile-posts', $user) }}" role="tabpanel" labelledby="self-profile-posts">
+        <div class="blockMessage">{{ phrase('loading...') }}</div>
+    </li>]]></replace>
+  </modification>
+  <modification type="public" template="member_view" modification_key="mdv_opp_add_tab_two" description="Add tabs #2" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[				<xf:if is="$user.canViewLatestActivity()">]]></find>
+    <replace><![CDATA[				<a href="{{ link('members/self-profile-posts', $user) }}"
+				   			rel="nofollow"
+							class="tabs-tab"
+							id="self-profile-posts"
+							role="tab">{{ phrase('mdv_opp_self_posts') }}</a>
+
+$0]]></replace>
+  </modification>
+</template_modifications>

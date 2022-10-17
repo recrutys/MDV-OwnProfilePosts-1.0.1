@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="mdv_opp_posts_by_user" version_id="1000070" version_string="1.0.0"><![CDATA[Posts by {name}]]></phrase>
+  <phrase title="mdv_opp_self_posts" version_id="1000070" version_string="1.0.0"><![CDATA[Self posts]]></phrase>
+</phrases>
